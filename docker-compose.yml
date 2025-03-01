@@ -3,18 +3,20 @@ services:
   front:
     image: tombursch/kitchenowl-web:latest
     restart: unless-stopped
-    # environment:
-    #   - BACK_URL=back:5000 # Change this if you rename the containers
+    environment:
+       - BACK_URL=back:5000 # Change this if you rename the containers
     ports:
-      - "80:80"
+      - "80:8080"
     depends_on:
       - back
   back:
     image: tombursch/kitchenowl-backend:latest
     restart: unless-stopped
     environment:
-      - JWT_SECRET_KEY=PLEASE_CHANGE_ME
-      # - FRONT_URL=http://localhost # Optional take a look at https://docs.kitchenowl.org/self-hosting/advanced/ for more info
+    - JWT_SECRET_KEY=$(openssl rand -base64 32)
+    - LLM_MODEL=gpt-4o
+    - OPENAI_API_KEY=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
+    - FRONT_URL=http://127.0.0.1
     volumes:
       - kitchenowl_data:/data
 
